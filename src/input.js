@@ -1,11 +1,10 @@
-// Centralised input. Tracks keyboard, mouse (for player 1 aim/shoot) and a
-// gamepad (optional, for player 2). Produces per-player command objects the
-// rest of the game consumes; it does not know about game logic.
+// Centralised input. Keyboard for both players (one shared keyboard, no
+// mouse) plus an optional gamepad for player 2. Produces per-player command
+// objects the rest of the game consumes; it does not know about game logic.
 export class Input {
   constructor(domElement) {
     this.dom = domElement;
     this.keys = new Set();
-    this.mouse = { ndcX: 0, ndcY: 0, left: false };
 
     window.addEventListener('keydown', (e) => {
       // Stop arrow keys / space from scrolling the page.
@@ -13,16 +12,7 @@ export class Input {
       this.keys.add(e.code);
     });
     window.addEventListener('keyup', (e) => this.keys.delete(e.code));
-    window.addEventListener('blur', () => { this.keys.clear(); this.mouse.left = false; });
-
-    domElement.addEventListener('mousemove', (e) => {
-      const r = domElement.getBoundingClientRect();
-      this.mouse.ndcX = ((e.clientX - r.left) / r.width) * 2 - 1;
-      this.mouse.ndcY = -((e.clientY - r.top) / r.height) * 2 + 1;
-    });
-    domElement.addEventListener('mousedown', (e) => { if (e.button === 0) this.mouse.left = true; });
-    window.addEventListener('mouseup', (e) => { if (e.button === 0) this.mouse.left = false; });
-    domElement.addEventListener('contextmenu', (e) => e.preventDefault());
+    window.addEventListener('blur', () => this.keys.clear());
   }
 
   has(code) { return this.keys.has(code); }
@@ -35,8 +25,8 @@ export class Input {
     return null;
   }
 
-  // Player 1: WASD move, Shift sprint, E pickup. Aim/shoot come from the
-  // mouse and are resolved in main.js (needs the camera for the ground ray).
+  // Player 1: WASD move (aim = movement direction), Space shoot, Left Shift
+  // sprint, E pickup. Keyboard only, no mouse.
   player1() {
     let x = 0, z = 0;
     if (this.has('KeyW')) z -= 1;
@@ -47,7 +37,7 @@ export class Input {
       x, z,
       sprint: this.has('ShiftLeft'),
       pickup: this.has('KeyE'),
-      shoot: this.mouse.left,
+      shoot: this.has('Space'),
     };
   }
 

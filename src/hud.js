@@ -60,7 +60,7 @@ export class HUD {
         <div style="text-align:left">
           <b style="color:#2e78ff">Player 1</b><br>
           Move: W A S D &nbsp;•&nbsp; Sprint: Left Shift<br>
-          Aim: Mouse &nbsp;•&nbsp; Shoot: Left Click<br>
+          Aim: move direction &nbsp;•&nbsp; Shoot: Space<br>
           Pick up: walk over or press E
         </div>
         <div style="text-align:left">

@@ -2,10 +2,10 @@
 
 A browser-based 3D **local co-op** survival shooter built with
 [Three.js](https://threejs.org/) and [Vite](https://vitejs.dev/). Two
-players share one screen and keyboard (player 2 can optionally use a
-gamepad). Walk around a small grass-and-water overworld, pick up a pistol,
-and fight wolves. The vibe: the calm overworld of an old Pokémon game — but
-with guns and dangerous animals.
+players share one screen and **one keyboard** — no mouse needed (player 2
+can optionally use a gamepad). Walk around a small grass-and-water
+overworld, pick up a pistol, and fight wolves. The vibe: the calm overworld
+of an old Pokémon game — but with guns and dangerous animals.
 
 Everything is built from Three.js primitives (boxes, cones, cylinders,
 spheres). **No downloaded 3D assets** — the game runs fully offline once
@@ -34,9 +34,13 @@ npm run preview
 | ------------- | --------------------- | ------------------------------------------ |
 | Move          | `W` `A` `S` `D`       | Arrow keys                                 |
 | Sprint        | `Left Shift`          | `Right Ctrl`                               |
-| Aim           | Mouse                 | Movement direction                         |
-| Shoot         | Left mouse button     | `Right Shift` or `Numpad 0`                |
+| Aim           | Movement direction    | Movement direction                         |
+| Shoot         | `Space`               | `Right Shift` or `Numpad 0`                |
 | Pick up       | walk over / `E`       | walk over / `/`                            |
+
+Both players aim in the direction they are walking, and keep facing that
+way when they stop — so you can stand still and shoot the last direction
+you moved. No mouse is used.
 
 **Gamepad (player 2, optional):** left stick to move, right stick to aim,
 right trigger to shoot, `A` to sprint. Plug it in and it takes over

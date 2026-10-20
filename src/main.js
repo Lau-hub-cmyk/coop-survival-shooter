@@ -66,15 +66,16 @@ function spawnWolves(n) {
 const input = new Input(renderer.domElement);
 const hud = new HUD(container);
 
-// For resolving player 1's mouse aim onto the ground.
-const raycaster = new THREE.Raycaster();
-const groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
-const aimPoint = new THREE.Vector3();
-const _p1Aim = new THREE.Vector3();
+// Scratch vector for player 2's gamepad aim.
 const _p2Aim = new THREE.Vector3();
 
 let running = false;
 hud.onStart(() => { running = true; });
+
+// Dev-only inspection hook (stripped from production builds).
+if (import.meta.env.DEV) {
+  window.__game = { players, wolves, pickups, world, projectiles };
+}
 
 // --- Resize -------------------------------------------------------------
 window.addEventListener('resize', () => {
@@ -98,14 +99,8 @@ function step(dt) {
   const cmd1 = input.player1();
   const cmd2 = input.player2();
 
-  // Player 1 aims with the mouse: ray from camera through cursor to ground.
-  raycaster.setFromCamera({ x: input.mouse.ndcX, y: input.mouse.ndcY }, coopCam.camera);
-  if (raycaster.ray.intersectPlane(groundPlane, aimPoint)) {
-    _p1Aim.set(aimPoint.x - players[0].pos.x, 0, aimPoint.z - players[0].pos.z);
-    cmd1.aimDir = _p1Aim;
-  }
-
-  // Player 2 aims with the gamepad right stick when present.
+  // Both players aim in their movement direction (handled in Player.update).
+  // Player 2 additionally aims with the gamepad right stick when present.
   if (cmd2.hasAim) {
     _p2Aim.set(cmd2.aimX, 0, cmd2.aimZ);
     cmd2.aimDir = _p2Aim;
